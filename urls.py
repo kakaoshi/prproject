@@ -1,24 +1,29 @@
-from django.urls import path
-from .views import PostListView, PostDetailView, PostEditView, PostDeleteView, CommentDeleteView, ProfileView, ProfileEditView, AddFollower, RemoveFollower, AddLike, AddDislike, UserSearch, ListFollowers, AddCommentLike, AddCommentDislike, CommentReplyView, PostNotification, FollowNotification, RemoveNotification
+"""socialnetwork URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', PostListView.as_view(), name='post-list'),
-    path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
-    path('post/edit/<int:pk>/', PostEditView.as_view(), name='post-edit'),
-    path('post/delete/<int:pk>/', PostDeleteView.as_view(), name='post-delete'),
-    path('post/<int:post_pk>/comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment-delete'),
-    path('post/<int:post_pk>/comment/<int:pk>/like', AddCommentLike.as_view(), name='comment-like'),
-    path('post/<int:post_pk>/comment/<int:pk>/dislike', AddCommentDislike.as_view(), name='comment-dislike'),
-    path('post/<int:post_pk>/comment/<int:pk>/reply', CommentReplyView.as_view(), name='comment-reply'),
-    path('post/<int:pk>/like', AddLike.as_view(), name='like'),
-    path('post/<int:pk>/dislike', AddDislike.as_view(), name='dislike'),
-    path('profile/<int:pk>/', ProfileView.as_view(), name='profile'),
-    path('profile/edit/<int:pk>/', ProfileEditView.as_view(), name='profile-edit'),
-    path('profile/<int:pk>/followers/', ListFollowers.as_view(), name='list-followers'),
-    path('profile/<int:pk>/followers/add', AddFollower.as_view(), name='add-follower'),
-    path('profile/<int:pk>/followers/remove', RemoveFollower.as_view(), name='remove-follower'),
-    path('search/', UserSearch.as_view(), name='profile-search'),
-    path('notification/<int:notification_pk>/post/<int:post_pk>', PostNotification.as_view(), name='post-notification'),
-    path('notification/<int:notification_pk>/profile/<int:profile_pk>', FollowNotification.as_view(), name='follow-notification'),
-    path('notification/delete/<int:notification_pk>', RemoveNotification.as_view(), name='notification-delete'),
+    path('admin/', admin.site.urls),
+    path('', include('landing.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('social/', include('social.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
